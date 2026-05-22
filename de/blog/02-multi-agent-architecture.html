@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | Der Krypto-Trading-Bot, der nie schläft.</title>
+    <meta name="description" content="Wir bringen eine Multi-Agenten-KI an den Start, die Markttrends rund um die Uhr analysiert. Sichere dir einen Platz auf der Warteliste für den Early Access.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="../../de/index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Funktionen</a>
+                        <a href="../../de/index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithmus</a>
+                        <a href="../../de/blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="../../de/faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="../../blog/02-multi-agent-architecture.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">EN</a>
+                        <a href="../../de/blog/02-multi-agent-architecture.html" class="px-3 py-1 bg-mira-primary text-white font-bold">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Anmelden / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <a href="../../de/blog_index.html" class="text-mira-muted dark:text-mira-mutedDark hover:text-mira-primary transition-colors inline-flex items-center gap-2 mb-10 font-medium">
+        &larr; Back to Blog
+    </a>
+    
+    <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 md:p-12 rounded-3xl shadow-lg">
+        <article class="prose prose-lg dark:prose-invert prose-blue max-w-none prose-headings:font-extrabold prose-a:text-mira-primary hover:prose-a:text-blue-600 prose-img:rounded-2xl">
+            <h1>Why We Use Multiple LLM Agents Instead of One</h1>
+<blockquote>
+<p>A deep dive into our Technical Analyst → Risk Manager → Executor pipeline, and why separation of concerns matters in algorithmic trading.</p>
+</blockquote>
+<h2>The Single-Model Trap</h2>
+<p>When people first build LLM-powered trading systems, they typically do this:</p>
+<pre><code class="language-python">prompt = f&quot;Should I buy {pair} at {price}? Here are the indicators: {data}&quot;
+response = llm.ask(prompt)
+if response == &quot;BUY&quot;:
+    execute_trade()
+</code></pre>
+<p>This has three fatal flaws:</p>
+<ol>
+<li><strong>No separation of analysis and risk</strong> — the same model that says "this looks good" also decides "how much to bet"</li>
+<li><strong>No accountability</strong> — when a trade goes wrong, you can't tell if the analysis was bad or the risk sizing was wrong</li>
+<li><strong>No learning</strong> — there's no structured way to review what went wrong</li>
+</ol>
+<h2>Our Solution: The Agent Pipeline</h2>
+<p>We split the decision into three distinct roles, each with a different model and different responsibilities:</p>
+<pre><code>Signal Generator (code) → Technical Analyst (LLM) → Risk Manager (LLM) → Executor (code)
+</code></pre>
+<h3>Role 1: Technical Analyst</h3>
+<p><strong>Model:</strong> Gemini 2.5 Flash (via OpenRouter)</p>
+<p><strong>Input:</strong>
+- 8 technical indicators (RSI, MACD, EMA, Bollinger, ATR, Volume, ADX, CMF)
+- Support/resistance levels
+- Market regime classification
+- Candlestick chart image (vision analysis)
+- Daily macro trend direction</p>
+<p><strong>Output:</strong> Structured JSON analysis</p>
+<pre><code class="language-json">{
+  &quot;analysis&quot;: {
+    &quot;setup_type&quot;: &quot;pullback&quot;,
+    &quot;trend&quot;: &quot;bullish&quot;,
+    &quot;trend_strength&quot;: 0.72,
+    &quot;recommendation&quot;: &quot;BUY&quot;,
+    &quot;confidence&quot;: 0.68,
+    &quot;entry_zone&quot;: {&quot;low&quot;: 1.04, &quot;high&quot;: 1.06},
+    &quot;stop_loss_suggestion&quot;: 1.02,
+    &quot;take_profit_suggestion&quot;: 1.15,
+    &quot;reasoning&quot;: &quot;Price pulling back to EMA(21) support in a daily bullish trend...&quot;
+  }
+}
+</code></pre>
+<p><strong>Why Gemini?</strong> It has strong vision capabilities for chart analysis and is cost-effective (~$0.15/M tokens). For a bot that analyzes every 4 hours across 3 pairs, this keeps LLM costs under $1/month.</p>
+<h3>Role 2: Risk Manager</h3>
+<p><strong>Model:</strong> Claude Sonnet 4 (via OpenRouter)</p>
+<p><strong>Input:</strong>
+- The Technical Analyst's full analysis
+- Current portfolio state (open positions, total risk)
+- Budget constraints (€83/pair, 2% max risk)
+- Market regime (trending/choppy/volatile)
+- Past trade reflections (lessons learned)</p>
+<p><strong>Output:</strong> Approve or Reject with position sizing</p>
+<pre><code class="language-json">{
+  &quot;decision&quot;: &quot;APPROVE&quot;,
+  &quot;risk_assessment&quot;: &quot;medium&quot;,
+  &quot;position&quot;: {
+    &quot;entry_price&quot;: 1.05,
+    &quot;stop_loss&quot;: 1.02,
+    &quot;take_profit&quot;: 1.15,
+    &quot;quantity&quot;: 24.3,
+    &quot;risk_eur&quot;: 1.50,
+    &quot;risk_reward_ratio&quot;: 2.2
+  },
+  &quot;warnings&quot;: [&quot;Volume below average — monitor closely&quot;]
+}
+</code></pre>
+<p><strong>Why Claude Sonnet?</strong> It excels at structured reasoning and following complex rules. Risk management requires careful calculation and constraint checking — Claude's strength.</p>
+<h3>Role 3: Trade Executor</h3>
+<p><strong>Model:</strong> None. Pure deterministic code.</p>
+<p><strong>Responsibilities:</strong>
+- Validate the Risk Manager's position data
+- Check total risk budget (6% max concurrent)
+- Place market order via CCXT
+- Track the position (entry, SL, TP)
+- Monitor for stop-loss / take-profit hits</p>
+<p><strong>Why no LLM?</strong> Execution should be 100% deterministic. No creativity, no interpretation. If the Risk Manager approved it and the numbers check out, execute. Period.</p>
+<h2>The Veto Power</h2>
+<p>The Risk Manager can <strong>reject</strong> any trade. This is critical because:</p>
+<ul>
+<li>The Technical Analyst might be overly optimistic about a setup</li>
+<li>Market conditions might have changed since the analysis</li>
+<li>Portfolio risk might already be too high</li>
+<li>The daily macro trend might contradict the 4h signal</li>
+</ul>
+<p>All rejections are logged with reasoning. The Self-Updater reviews these later to check if rejections were too conservative.</p>
+<h2>How Reflections Flow Back</h2>
+<p>After a trade closes (win or loss), the Self-Updater generates reflections:</p>
+<pre><code>Trade: SUI/USDT BUY → EXIT at stop-loss
+P&amp;L: -€1.50
+Reflection: &quot;Stop-loss was placed at 2.5× ATR but below a clear support level. 
+             Price wicked 1% below the stop before bouncing. Consider wider stops 
+             or visual stop placement near swing lows.&quot;
+</code></pre>
+<p>This reflection gets stored and injected into future prompts:</p>
+<pre><code>## Lessons Learned from Past Trades
+- 🔴 [EXIT] Stop-loss was placed at 2.5× ATR but below a clear support level...
+- 🟡 [RISK] In choppy markets, reduce position size by 50%...
+</code></pre>
+<p>Now the Technical Analyst knows to suggest visual stops near support levels, and the Risk Manager knows to reduce size in choppy conditions.</p>
+<h2>Why This Architecture Works</h2>
+<h3>1. Separation of Concerns</h3>
+<p>Each agent has a single responsibility:
+- Analyst reads the market
+- Risk Manager protects the portfolio
+- Executor places orders</p>
+<p>When something goes wrong, you know exactly which layer failed.</p>
+<h3>2. Model Specialization</h3>
+<p>Different models for different tasks:
+- Gemini for vision + pattern recognition
+- Claude for structured reasoning + constraint checking
+- No model for execution (deterministic code)</p>
+<h3>3. Auditability</h3>
+<p>Every decision is logged with:
+- Which agent made it
+- Which model was used
+- The full reasoning
+- Token usage and cost</p>
+<p>This creates a complete audit trail for every trade.</p>
+<h3>4. Continuous Improvement</h3>
+<p>The Self-Updater closes the loop:
+- Reviews completed trades
+- Analyzes missed opportunities
+- Generates actionable reflections
+- Injects them into future decisions</p>
+<p>The bot literally gets smarter over time.</p>
+<h2>Cost Analysis</h2>
+<p>For a bot running 24/7 with 4-hour analysis cycles:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Calls/day</th>
+<th style="text-align: left;">Tokens/call</th>
+<th style="text-align: left;">Cost/M tokens</th>
+<th style="text-align: left;">Daily cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Technical Analyst</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">~2,500</td>
+<td style="text-align: left;">$0.15</td>
+<td style="text-align: left;">~$0.002</td>
+</tr>
+<tr>
+<td style="text-align: left;">Risk Manager</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">~1,500</td>
+<td style="text-align: left;">$3.00</td>
+<td style="text-align: left;">~$0.014</td>
+</tr>
+<tr>
+<td style="text-align: left;">Self-Updater</td>
+<td style="text-align: left;">0.1</td>
+<td style="text-align: left;">~3,000</td>
+<td style="text-align: left;">$3.00</td>
+<td style="text-align: left;">~$0.001</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Total</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>~$0.017/day</strong></td>
+</tr>
+</tbody>
+</table>
+<p>That's about <strong>$0.50/month</strong> in LLM costs. The entire system runs on less than the cost of a single coffee per year.</p>
+<h2>What We Learned</h2>
+<p>Building a multi-agent trading system taught us:</p>
+<ol>
+<li><strong>LLMs are great at context, terrible at math</strong> — always validate calculations in code</li>
+<li><strong>Separation of concerns is even more important with LLMs</strong> — they're persuasive, so you need a separate risk layer</li>
+<li><strong>Reflections need to be specific</strong> — "be more careful" is useless; "require ADX &gt; 25 for breakouts" is actionable</li>
+<li><strong>Missed opportunities matter</strong> — reviewing rejected trades is as important as reviewing executed ones</li>
+<li><strong>Cost is not a concern</strong> — with modern models, LLM-powered trading is surprisingly cheap</li>
+</ol>
+<h2>What's Next</h2>
+<ul>
+<li>Live trading with real capital</li>
+<li>Adding a Sentiment Analysis agent for news/social data</li>
+<li>TradingView webhook integration</li>
+<li>Telegram alerts for trade notifications</li>
+</ul>
+<hr />
+<p><em>This is part of the crypto-loco development series. Read the full project on GitHub.</em></p>
+        </article>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. Alle Rechte vorbehalten.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="../../de/legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Datenschutzerklärung</a>
+                <a href="../../de/legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Nutzungsbedingungen</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

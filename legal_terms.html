@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | The Self-Improving Crypto Agent.</title>
+    <meta name="description" content="MIRA doesn&#39;t just follow rules. She reads the market, reasons through trades using a Multi-Agent AI architecture, and learns from every mistake.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="./index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Features</a>
+                        <a href="./index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithm</a>
+                        <a href="./blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="./faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="./legal_terms.html" class="px-3 py-1 bg-mira-primary text-white font-bold">EN</a>
+                        <a href="./de/legal_terms.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Login / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-mira-card border border-mira-border p-8 rounded-2xl">
+        <h1 class="text-4xl font-bold mb-8">Terms of Service</h1>
+        <div class="prose prose-invert max-w-none text-gray-300">
+            <p><strong>Last Updated: May 2026</strong></p>
+            
+            <h2 class="text-white font-bold text-xl mt-8 mb-4">1. Acceptance of Terms</h2>
+            <p>By using the MIRA Signal Service, you agree to these Terms of Service. MIRA is a tool for informational purposes only.</p>
+            
+            <h2 class="text-white font-bold text-xl mt-8 mb-4">2. No Financial Advice</h2>
+            <p><strong>IMPORTANT:</strong> MIRA is not a financial advisor. The signals provided are algorithmic alerts based on technical indicators. Cryptocurrency trading involves massive risk, and you may lose your entire capital. You are solely responsible for any trades you execute.</p>
+            
+            <h2 class="text-white font-bold text-xl mt-8 mb-4">3. Subscription & Billing</h2>
+            <p>Paid subscriptions auto-renew quarterly. You may cancel at any time through the dashboard or by contacting support. Refunds are not provided for partial quarters.</p>
+            
+            <h2 class="text-white font-bold text-xl mt-8 mb-4">4. Limitation of Liability</h2>
+            <p>MIRA and its creators are not liable for any financial losses, API downtime, or Telegram outages that result in delayed or missed signals.</p>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. All rights reserved.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="./legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Privacy Policy</a>
+                <a href="./legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

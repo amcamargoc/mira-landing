@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | The Self-Improving Crypto Agent.</title>
+    <meta name="description" content="MIRA doesn&#39;t just follow rules. She reads the market, reasons through trades using a Multi-Agent AI architecture, and learns from every mistake.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="../index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Features</a>
+                        <a href="../index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithm</a>
+                        <a href="../blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="../faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="../blog/03-self-improvement.html" class="px-3 py-1 bg-mira-primary text-white font-bold">EN</a>
+                        <a href="../de/blog/03-self-improvement.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Login / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <a href="../blog_index.html" class="text-mira-muted dark:text-mira-mutedDark hover:text-mira-primary transition-colors inline-flex items-center gap-2 mb-10 font-medium">
+        &larr; Back to Blog
+    </a>
+    
+    <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 md:p-12 rounded-3xl shadow-lg">
+        <article class="prose prose-lg dark:prose-invert prose-blue max-w-none prose-headings:font-extrabold prose-a:text-mira-primary hover:prose-a:text-blue-600 prose-img:rounded-2xl">
+            <h1>How Our Trading Bot Learns From Its Mistakes</h1>
+<blockquote>
+<p>Most trading bots make the same mistakes forever. Ours reviews every trade, finds patterns in what went wrong, and updates its own decision-making process. Here's how.</p>
+</blockquote>
+<h2>The Problem: Static Bots in Dynamic Markets</h2>
+<p>A traditional trading bot has fixed rules:</p>
+<pre><code class="language-python">if RSI &lt; 30 and price &gt; EMA_200:
+    BUY
+</code></pre>
+<p>These rules work until they don't. When market conditions change — volatility spikes, trends reverse, volume dries up — the bot keeps applying the same logic and loses money.</p>
+<p>The only way to improve is for a human to manually adjust parameters. This is slow, biased, and doesn't scale.</p>
+<h2>Our Solution: The Self-Improvement Loop</h2>
+<p>We built a system where the bot reviews its own performance and generates actionable lessons:</p>
+<pre><code>Trade closes → Log outcome → Self-Updater reviews → Generate reflections → Inject into prompts
+</code></pre>
+<h3>Step 1: Log Everything</h3>
+<p>Every decision is recorded:</p>
+<ul>
+<li><strong>Technical Analyst</strong> recommendations (BUY/SELL/HOLD with confidence)</li>
+<li><strong>Risk Manager</strong> decisions (APPROVE/REJECT with reasoning)</li>
+<li><strong>Trade outcomes</strong> (entry, exit, P&amp;L, reason for exit)</li>
+</ul>
+<p>This creates a complete history of what the bot thought, what it did, and what happened.</p>
+<h3>Step 2: Find Patterns</h3>
+<p>The Self-Updater doesn't just look at completed trades. It cross-references three data sources:</p>
+<ol>
+<li><strong>Completed trades</strong> — wins and losses with P&amp;L</li>
+<li><strong>Rejected trades</strong> — analyst said BUY, risk manager said no</li>
+<li><strong>Missed opportunities</strong> — approved but never executed</li>
+</ol>
+<p>This is crucial. A bot that only reviews executed trades has a biased view. It doesn't know if the Risk Manager is too conservative or if good setups are being rejected.</p>
+<h3>Step 3: Generate Reflections</h3>
+<p>Using an LLM (Claude Sonnet 4), the Self-Updater analyzes the data and generates structured reflections:</p>
+<pre><code class="language-json">{
+  &quot;reflections&quot;: [
+    {
+      &quot;type&quot;: &quot;exit&quot;,
+      &quot;content&quot;: &quot;Stop-loss placed at 2.5× ATR gets wicked out before bounce. Use visual stops near swing lows instead.&quot;,
+      &quot;evidence&quot;: &quot;3 of 5 losses on SUI/USDT were wicks below SL followed by reversal&quot;,
+      &quot;priority&quot;: &quot;high&quot;
+    },
+    {
+      &quot;type&quot;: &quot;missed&quot;,
+      &quot;content&quot;: &quot;Risk Manager rejects 60% of breakout setups in trending markets. These would have won 70% of the time.&quot;,
+      &quot;evidence&quot;: &quot;12 rejected breakouts, 8 would have hit TP based on subsequent price action&quot;,
+      &quot;priority&quot;: &quot;high&quot;
+    },
+    {
+      &quot;type&quot;: &quot;signal&quot;,
+      &quot;content&quot;: &quot;RSI oversold + CMF positive is the highest-probability entry setup. Prioritize these.&quot;,
+      &quot;evidence&quot;: &quot;5 trades with this combo: 4 wins, avg +3.2% P&amp;L&quot;,
+      &quot;priority&quot;: &quot;medium&quot;
+    }
+  ]
+}
+</code></pre>
+<p>Each reflection has:
+- <strong>Type</strong> — entry, exit, risk, signal, or missed
+- <strong>Content</strong> — the specific lesson
+- <strong>Evidence</strong> — data supporting it
+- <strong>Priority</strong> — high, medium, or low</p>
+<h3>Step 4: Inject Into Future Decisions</h3>
+<p>Reflections are stored in memory and injected into the Technical Analyst and Risk Manager prompts:</p>
+<pre><code>## Lessons Learned from Past Trades
+- 🔴 [EXIT] Stop-loss placed at 2.5× ATR gets wicked out before bounce...
+- 🔴 [MISSED] Risk Manager rejects 60% of breakout setups in trending markets...
+- 🟡 [SIGNAL] RSI oversold + CMF positive is the highest-probability entry setup...
+</code></pre>
+<p>Now the agents have context from past experience. The Technical Analyst knows to suggest visual stops near support levels. The Risk Manager knows to be less conservative on breakouts in trending markets.</p>
+<h3>Step 5: Avoid Stale Reflections</h3>
+<p>The Self-Updater keeps only the last 30 reflections and marks new ones that contradict existing ones as "updated." This prevents the prompt from growing indefinitely and ensures the bot adapts to new patterns.</p>
+<h2>What Kinds of Things Does It Learn?</h2>
+<h3>Entry Timing</h3>
+<blockquote>
+<p><em>"In choppy markets (ADX &lt; 20), pullback entries fail 65% of the time. Only enter on confirmed breakouts with volume expansion."</em></p>
+</blockquote>
+<h3>Stop-Loss Placement</h3>
+<blockquote>
+<p><em>"Visual stops near swing lows outperform ATR-based stops. Price frequently wicks 1-2% below ATR stops before reversing."</em></p>
+</blockquote>
+<h3>Risk Sizing</h3>
+<blockquote>
+<p><em>"When Risk Manager approves trades at reduced size (50% risk), they win at the same rate as full-size trades. This is a good compromise for moderate-confidence setups."</em></p>
+</blockquote>
+<h3>Missed Opportunities</h3>
+<blockquote>
+<p><em>"Risk Manager rejected 15 BUY signals on INJ/USDT. 11 of these would have been profitable based on subsequent price action. The daily trend filter is too strict for this pair."</em></p>
+</blockquote>
+<h3>Pattern Recognition</h3>
+<blockquote>
+<p><em>"The combination of bullish EMA alignment + RSI 30-50 + price near lower Bollinger Band has a 72% win rate. This is our highest-probability setup."</em></p>
+</blockquote>
+<h2>How Often Does It Review?</h2>
+<p>The Self-Updater runs automatically every 12 trading cycles (every 48 hours at our 4-hour analysis interval). It only generates reflections if there are at least 3 new trades to review — this prevents noise from small sample sizes.</p>
+<p>You can also trigger a manual review via the dashboard API:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:8080/api/self-review
+</code></pre>
+<h2>The Results</h2>
+<p>In backtesting, the self-improvement loop showed measurable improvement:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Without Reflections</th>
+<th style="text-align: left;">With Reflections</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Win rate</td>
+<td style="text-align: left;">41.2%</td>
+<td style="text-align: left;">43.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Avg P&amp;L per trade</td>
+<td style="text-align: left;">+0.11%</td>
+<td style="text-align: left;">+0.16%</td>
+</tr>
+<tr>
+<td style="text-align: left;">False breakout entries</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: left;">11</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stop-loss wick-outs</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">3</td>
+</tr>
+</tbody>
+</table>
+<p>The improvements are modest but consistent. The key insight: <strong>the bot doesn't become a genius overnight, but it stops making the same mistakes repeatedly.</strong></p>
+<h2>Why This Matters</h2>
+<p>Most trading systems are static. They have a fixed edge that erodes over time as markets change. Our system has a <strong>learning edge</strong> — it adapts to new conditions by reviewing its own performance.</p>
+<p>This is the difference between:
+- A bot that loses money the same way every time
+- A bot that identifies what's not working and adjusts</p>
+<p>It's not magic. It's just systematic review and feedback — the same process any good trader uses, automated.</p>
+<h2>Technical Details</h2>
+<h3>Architecture</h3>
+<pre><code>MemoryStore (JSON)
+  ├── decisions[]       — Agent decisions (analyst, risk manager)
+  ├── trade_outcomes[]  — Completed trades with P&amp;L
+  └── agent_reflections[] — Generated reflections
+
+SelfUpdater
+  ├── review()          — Main review function
+  ├── _find_missed_opportunities() — Cross-references decisions with outcomes
+  └── _build_prompt()   — Builds review prompt with stats + missed trades
+</code></pre>
+<h3>The Prompt</h3>
+<p>The Self-Updater builds a comprehensive review prompt that includes:</p>
+<ul>
+<li>Portfolio summary (total trades, win rate, P&amp;L, avg win/loss)</li>
+<li>Per-pair statistics</li>
+<li>Full trade log with entry/exit prices and reasoning</li>
+<li>Missed opportunities (rejected and approved-but-not-executed)</li>
+<li>Decision pipeline stats (approval rate, hold rate)</li>
+<li>Existing reflections (to avoid duplicates)</li>
+</ul>
+<p>The LLM then generates new reflections based on patterns in this data.</p>
+<h3>Cost</h3>
+<p>The Self-Updater runs infrequently (every 48 hours) and uses ~3,000 tokens per review. At Claude Sonnet 4 pricing ($3/M input tokens), this costs about <strong>$0.01 per review</strong> or <strong>$0.15/month</strong>.</p>
+<h2>What's Next</h2>
+<ul>
+<li>Live trading validation of the self-improvement loop</li>
+<li>Adding a Sentiment Analysis agent for news/social data</li>
+<li>TradingView webhook integration for external signal sources</li>
+<li>Telegram alerts when new reflections are generated</li>
+</ul>
+<hr />
+<p><em>This is part of the crypto-loco development series. Read the full project on GitHub.</em></p>
+        </article>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. All rights reserved.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="../legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Privacy Policy</a>
+                <a href="../legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | Der Krypto-Trading-Bot, der nie schläft.</title>
+    <meta name="description" content="Wir bringen eine Multi-Agenten-KI an den Start, die Markttrends rund um die Uhr analysiert. Sichere dir einen Platz auf der Warteliste für den Early Access.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="../../de/index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Funktionen</a>
+                        <a href="../../de/index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithmus</a>
+                        <a href="../../de/blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="../../de/faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="../../blog/00-overview.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">EN</a>
+                        <a href="../../de/blog/00-overview.html" class="px-3 py-1 bg-mira-primary text-white font-bold">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Anmelden / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <a href="../../de/blog_index.html" class="text-mira-muted dark:text-mira-mutedDark hover:text-mira-primary transition-colors inline-flex items-center gap-2 mb-10 font-medium">
+        &larr; Back to Blog
+    </a>
+    
+    <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 md:p-12 rounded-3xl shadow-lg">
+        <article class="prose prose-lg dark:prose-invert prose-blue max-w-none prose-headings:font-extrabold prose-a:text-mira-primary hover:prose-a:text-blue-600 prose-img:rounded-2xl">
+            <h1>crypto-loco: The Self-Improving Crypto Trading Bot</h1>
+<h2>The Pitch</h2>
+<p>A crypto trading bot that doesn't just follow rules — it learns from every trade, adapts to changing markets, and gets smarter over time. Built with Python, powered by LLM agents, and designed for real-world trading with strict risk management.</p>
+<h2>The Problem</h2>
+<p>Most trading bots are either:
+- <strong>Too rigid</strong> — fixed rules that work until markets change, then they lose money
+- <strong>Too opaque</strong> — black-box AI that "predicts" prices with coin-flip accuracy
+- <strong>Too expensive</strong> — complex systems that cost more in API fees than they earn</p>
+<h2>Our Solution</h2>
+<p><strong>crypto-loco</strong> combines deterministic technical analysis with LLM reasoning and a self-improvement loop:</p>
+<ol>
+<li><strong>Read the market</strong> — 8 technical indicators, support/resistance, regime classification</li>
+<li><strong>Reason about it</strong> — Multi-agent LLM system (analyst + risk manager) with chart vision</li>
+<li><strong>Execute safely</strong> — Deterministic order placement with hard-coded risk limits</li>
+<li><strong>Learn from mistakes</strong> — Post-trade review generates reflections injected into future decisions</li>
+</ol>
+<h2>Key Numbers</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Backtested P&amp;L (1 year)</td>
+<td style="text-align: left;">+12.42% net</td>
+</tr>
+<tr>
+<td style="text-align: left;">Win rate</td>
+<td style="text-align: left;">43.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">LLM cost</td>
+<td style="text-align: left;">~$0.50/month</td>
+</tr>
+<tr>
+<td style="text-align: left;">Capital</td>
+<td style="text-align: left;">€250 (€83/pair)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Max risk per trade</td>
+<td style="text-align: left;">2% (€1.66)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tests</td>
+<td style="text-align: left;">49 passing</td>
+</tr>
+</tbody>
+</table>
+<h2>How It Works</h2>
+<pre><code>Binance Data → 8 Indicators + S/R + Regime → Technical Analyst (LLM)
+  → Risk Manager (LLM) → Trade Executor (code) → Dashboard
+    ↕
+Self-Improvement: Reviews trades + missed opportunities → Generates reflections
+</code></pre>
+<h2>What Makes It Different</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Traditional Bot</th>
+<th style="text-align: left;">crypto-loco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Decision making</td>
+<td style="text-align: left;">Fixed rules</td>
+<td style="text-align: left;">LLM agents with context</td>
+</tr>
+<tr>
+<td style="text-align: left;">Risk management</td>
+<td style="text-align: left;">Hard-coded</td>
+<td style="text-align: left;">Dynamic sizing by regime</td>
+</tr>
+<tr>
+<td style="text-align: left;">Learning</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: left;">Self-improvement loop</td>
+</tr>
+<tr>
+<td style="text-align: left;">Transparency</td>
+<td style="text-align: left;">Opaque or rigid</td>
+<td style="text-align: left;">Full audit trail</td>
+</tr>
+<tr>
+<td style="text-align: left;">Adaptation</td>
+<td style="text-align: left;">Manual tuning</td>
+<td style="text-align: left;">Automatic reflection injection</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cost</td>
+<td style="text-align: left;">High or low quality</td>
+<td style="text-align: left;">$0.50/month, quality reasoning</td>
+</tr>
+</tbody>
+</table>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Python 3.11+</strong> with async/await</li>
+<li><strong>CCXT</strong> for Binance API</li>
+<li><strong>pandas-ta</strong> for technical indicators</li>
+<li><strong>OpenRouter</strong> for multi-model LLM (Gemini + Claude)</li>
+<li><strong>FastAPI</strong> for real-time dashboard</li>
+<li><strong>SQLite</strong> for persistent data storage</li>
+<li><strong>49 tests</strong> covering all modules</li>
+</ul>
+<h2>Status</h2>
+<p>🟢 <strong>Phase 6: Go Live &amp; Continuous Improvement</strong> — Self-improvement loop complete. Ready for live trading.</p>
+<h2>Links</h2>
+<ul>
+<li><a href=".">GitHub Repository</a></li>
+<li><a href="../">Full Documentation</a></li>
+<li><a href="02-multi-agent-architecture.md">Architecture Deep Dive</a></li>
+<li><a href="03-self-improvement.md">Self-Improvement Explained</a></li>
+</ul>
+<hr />
+<p><em>Built for real trading, not backtest overfitting. Every decision is logged, every trade is reviewed, every mistake becomes a lesson.</em></p>
+        </article>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. Alle Rechte vorbehalten.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="../../de/legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Datenschutzerklärung</a>
+                <a href="../../de/legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Nutzungsbedingungen</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

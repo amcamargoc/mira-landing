@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | Der Krypto-Trading-Bot, der nie schläft.</title>
+    <meta name="description" content="Wir bringen eine Multi-Agenten-KI an den Start, die Markttrends rund um die Uhr analysiert. Sichere dir einen Platz auf der Warteliste für den Early Access.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="../../de/index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Funktionen</a>
+                        <a href="../../de/index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithmus</a>
+                        <a href="../../de/blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="../../de/faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="../../blog/01-how-it-works.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">EN</a>
+                        <a href="../../de/blog/01-how-it-works.html" class="px-3 py-1 bg-mira-primary text-white font-bold">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Anmelden / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+    <a href="../../de/blog_index.html" class="text-mira-muted dark:text-mira-mutedDark hover:text-mira-primary transition-colors inline-flex items-center gap-2 mb-10 font-medium">
+        &larr; Back to Blog
+    </a>
+    
+    <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 md:p-12 rounded-3xl shadow-lg">
+        <article class="prose prose-lg dark:prose-invert prose-blue max-w-none prose-headings:font-extrabold prose-a:text-mira-primary hover:prose-a:text-blue-600 prose-img:rounded-2xl">
+            <h1>Building a Crypto Trading Bot That Learns From Its Mistakes</h1>
+<blockquote>
+<p>How we combined technical analysis with LLM agents to create a self-improving trading system — no crystal ball required.</p>
+</blockquote>
+<h2>The Problem With Most Trading Bots</h2>
+<p>Most crypto trading bots fall into one of two camps:</p>
+<ol>
+<li><strong>Pure algorithmic</strong> — rigid rules that work until market conditions change, then they bleed money</li>
+<li><strong>Pure AI</strong> — black boxes that "predict" prices with the accuracy of a coin flip</li>
+</ol>
+<p>Neither approach works well in practice. Markets are too complex for fixed rules, and too noisy for prediction models.</p>
+<h2>Our Approach: Follow, Don't Predict</h2>
+<p><strong>crypto-loco</strong> takes a different path. Instead of trying to predict where prices will go, we:</p>
+<ul>
+<li><strong>Read</strong> what the market is doing right now using 8 technical indicators</li>
+<li><strong>Classify</strong> the current market regime (trending, choppy, or volatile)</li>
+<li><strong>Confirm</strong> signals across multiple timeframes (4h entry + daily macro trend)</li>
+<li><strong>Decide</strong> using LLM agents that can reason about context, not just numbers</li>
+<li><strong>Learn</strong> from every trade — wins, losses, and missed opportunities</li>
+</ul>
+<p>The result: a bot that adapts to changing conditions and gets smarter over time.</p>
+<h2>The Architecture</h2>
+<pre><code>Binance Data → Analysis Engine → LLM Agents → Trade Execution → Dashboard
+                                        ↕
+                                Self-Improvement Loop
+</code></pre>
+<h3>Layer 1: Data Pipeline</h3>
+<p>We connect to Binance via CCXT (async) for two data streams:</p>
+<ul>
+<li><strong>REST API</strong> — fetches 1 year of historical OHLCV candles for backtesting</li>
+<li><strong>WebSocket</strong> — real-time kline streams that store closed candles to SQLite</li>
+</ul>
+<p>This gives us a persistent, queryable database of price data that survives restarts.</p>
+<h3>Layer 2: Technical Analysis Engine</h3>
+<p>We calculate 8 indicators using <code>pandas-ta</code>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Indicator</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">EMA (9, 21, 50, 200)</td>
+<td style="text-align: left;">Trend direction at multiple scales</td>
+</tr>
+<tr>
+<td style="text-align: left;">RSI (14)</td>
+<td style="text-align: left;">Overbought/oversold momentum</td>
+</tr>
+<tr>
+<td style="text-align: left;">MACD (12, 26, 9)</td>
+<td style="text-align: left;">Momentum crossovers</td>
+</tr>
+<tr>
+<td style="text-align: left;">Bollinger Bands (20, 2)</td>
+<td style="text-align: left;">Volatility envelope + squeeze detection</td>
+</tr>
+<tr>
+<td style="text-align: left;">ATR (14)</td>
+<td style="text-align: left;">Volatility for stop-loss sizing</td>
+</tr>
+<tr>
+<td style="text-align: left;">Volume Ratio</td>
+<td style="text-align: left;">Confirms moves with volume</td>
+</tr>
+<tr>
+<td style="text-align: left;">ADX (14)</td>
+<td style="text-align: left;">Trend strength measurement</td>
+</tr>
+<tr>
+<td style="text-align: left;">Chaikin Money Flow</td>
+<td style="text-align: left;">Buying/selling pressure</td>
+</tr>
+</tbody>
+</table>
+<p>We also detect <strong>support/resistance levels</strong> using pivot points and price clustering, and classify the <strong>market regime</strong> (trending vs choppy vs volatile) using ADX + Bollinger Band width.</p>
+<h3>Layer 3: Multi-Agent LLM System</h3>
+<p>This is where it gets interesting. Instead of a single model making all decisions, we use a pipeline:</p>
+<pre><code>Signal + Market Data
+  → Technical Analyst (Gemini 2.5 Flash)
+    → Structured analysis with chart vision
+  → Risk Manager (Claude Sonnet 4)
+    → Approve/Reject + position sizing
+  → Trade Executor (deterministic code)
+    → Market order via CCXT
+</code></pre>
+<p><strong>The Technical Analyst</strong> receives indicator data, support/resistance levels, and a candlestick chart image. It produces a structured analysis with:
+- Setup type (pullback, breakout, or consolidation)
+- Trend direction and strength
+- Entry zone, stop-loss, and take-profit suggestions
+- Confidence score (0-100%)</p>
+<p><strong>The Risk Manager</strong> reviews the analyst's proposal against portfolio constraints:
+- Max 2% risk per trade (€1.66 on an €83 pair allocation)
+- Max 6% concurrent risk across all positions
+- Dynamic sizing based on market regime (reduce in choppy/volatile markets)
+- Risk/reward ratio minimum of 1.5:1</p>
+<p>The Risk Manager can <strong>veto</strong> any trade. All vetoes are logged for later review.</p>
+<h3>Layer 4: Self-Improvement Loop</h3>
+<p>After trades close, a <strong>Self-Updater</strong> agent reviews:</p>
+<ol>
+<li><strong>Completed trades</strong> — what worked, what didn't</li>
+<li><strong>Rejected trades</strong> — did the Risk Manager miss good opportunities?</li>
+<li><strong>Approved but not executed</strong> — why did execution fail?</li>
+</ol>
+<p>It generates <strong>reflections</strong> like:</p>
+<blockquote>
+<p><em>"In choppy markets, breakouts without volume expansion fail 70% of the time. Require ADX &gt; 25 before approving breakout entries."</em></p>
+</blockquote>
+<p>These reflections are injected into future analyst and risk manager prompts, so the bot literally learns from its own experience.</p>
+<h2>Risk Management</h2>
+<p>We trade with €250 total capital, split across 3 pairs (~€83 each). Our rules:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Rule</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Max risk per trade</td>
+<td style="text-align: left;">2% of pair allocation (€1.66)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Max concurrent risk</td>
+<td style="text-align: left;">6% of total (€15)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stop-loss</td>
+<td style="text-align: left;">2.5× ATR or visual support level</td>
+</tr>
+<tr>
+<td style="text-align: left;">Take-profit</td>
+<td style="text-align: left;">5.0× ATR</td>
+</tr>
+<tr>
+<td style="text-align: left;">Min risk/reward</td>
+<td style="text-align: left;">1.5:1</td>
+</tr>
+<tr>
+<td style="text-align: left;">Max positions</td>
+<td style="text-align: left;">3 (one per pair)</td>
+</tr>
+</tbody>
+</table>
+<p>The Risk Manager dynamically adjusts position size based on market regime:
+- <strong>Trending</strong>: Full risk (€1.66)
+- <strong>Choppy</strong>: Half risk (€0.83)
+- <strong>Volatile</strong>: Quarter risk (€0.41) with wider stops</p>
+<h2>Backtesting Results</h2>
+<p>On 1 year of 4h data for SUI/USDT, INJ/USDT, and ICP/USDT:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Net P&amp;L (after fees)</td>
+<td style="text-align: left;">+12.42%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Average win rate</td>
+<td style="text-align: left;">43.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Trades</td>
+<td style="text-align: left;">77</td>
+</tr>
+<tr>
+<td style="text-align: left;">Optimal stop</td>
+<td style="text-align: left;">2.5× ATR</td>
+</tr>
+<tr>
+<td style="text-align: left;">Optimal confidence threshold</td>
+<td style="text-align: left;">45%</td>
+</tr>
+</tbody>
+</table>
+<p>The key insight: <strong>wider stop losses improve win rate significantly</strong>. A 2.5× ATR stop outperformed tighter stops because it survives short-term wicks before the bounce occurs.</p>
+<h2>The Dashboard</h2>
+<p>We built a real-time web dashboard with FastAPI and vanilla HTML/CSS/JS:</p>
+<ul>
+<li><strong>Live price cards</strong> with 24h change</li>
+<li><strong>Signal table</strong> showing pair, signal, confidence, trend, RSI</li>
+<li><strong>Open positions</strong> with real-time P&amp;L</li>
+<li><strong>Agent decision log</strong> with model badges and reasoning</li>
+<li><strong>Candlestick charts</strong> per pair with indicator overlays</li>
+<li><strong>WebSocket live feed</strong> updating every 30 seconds</li>
+</ul>
+<h2>What's Next</h2>
+<ul>
+<li>Live trading with real capital (€250)</li>
+<li>Telegram/Discord alerts for trade notifications</li>
+<li>TradingView webhook integration for external signals</li>
+<li>Sentiment analysis agent for news/social data</li>
+<li>Continuous agent self-improvement in production</li>
+</ul>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Python 3.11+</strong> with async/await throughout</li>
+<li><strong>CCXT</strong> for Binance API (spot only)</li>
+<li><strong>pandas-ta</strong> for technical indicators</li>
+<li><strong>aiosqlite</strong> for async SQLite storage</li>
+<li><strong>OpenRouter</strong> for multi-model LLM access (Gemini, Claude, GPT-4)</li>
+<li><strong>FastAPI</strong> for the dashboard</li>
+<li><strong>mplfinance</strong> for chart rendering</li>
+<li><strong>pytest</strong> for testing (49 tests)</li>
+</ul>
+<h2>Why This Matters</h2>
+<p>Most trading bots are either too rigid or too opaque. By combining deterministic technical analysis with LLM reasoning and a self-improvement loop, we get a system that:</p>
+<ul>
+<li><strong>Adapts</strong> to changing market conditions</li>
+<li><strong>Explains</strong> every decision with clear reasoning</li>
+<li><strong>Learns</strong> from mistakes without human intervention</li>
+<li><strong>Respects risk</strong> with hard-coded safety constraints</li>
+</ul>
+<p>It's not perfect. No trading system is. But it's a solid foundation for a bot that gets better every day.</p>
+<hr />
+<p><em>This is an open development log. Follow the progress on GitHub.</em></p>
+        </article>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. Alle Rechte vorbehalten.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="../../de/legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Datenschutzerklärung</a>
+                <a href="../../de/legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Nutzungsbedingungen</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

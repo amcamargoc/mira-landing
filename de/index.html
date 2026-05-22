@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <link rel="icon" href="/static/mira_logo.png" type="image/png">
+    <title>MIRA | Der Krypto-Trading-Bot, der nie schläft.</title>
+    <meta name="description" content="Wir bringen eine Multi-Agenten-KI an den Start, die Markttrends rund um die Uhr analysiert. Sichere dir einen Platz auf der Warteliste für den Early Access.">
+    
+    <!-- AI SEO Tags -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="GPTBot" content="index, follow">
+    <meta name="ClaudeBot" content="index, follow">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        mira: {
+                            bg: '#f8fafc', // slate-50
+                            bgDark: '#0f172a', // slate-900
+                            card: '#ffffff',
+                            cardDark: '#1e293b', // slate-800
+                            border: '#e2e8f0', // slate-200
+                            borderDark: '#334155', // slate-700
+                            primary: '#3b82f6',
+                            success: '#10b981',
+                            danger: '#ef4444',
+                            text: '#0f172a',
+                            textDark: '#f8fafc',
+                            muted: '#64748b',
+                            mutedDark: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Theme initialization
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-mira-bg dark:bg-mira-bgDark text-mira-text dark:text-mira-textDark transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="border-b border-mira-border dark:border-mira-borderDark bg-mira-bg/90 dark:bg-mira-bgDark/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/.html" class="text-2xl font-black tracking-tighter text-mira-text dark:text-white flex items-center gap-2">
+                        <img src="/static/mira_logo.png" alt="MIRA Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                        MIRA
+                    </a>
+                    <div class="hidden md:flex gap-6">
+                        <a href="../de/index.html#features" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Funktionen</a>
+                        <a href="../de/index.html#algorithm" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Algorithmus</a>
+                        <a href="../de/blog_index.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">Blog</a>
+                        <a href="../de/faq.html" class="text-mira-muted dark:text-gray-300 hover:text-black dark:hover:text-white transition">FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg text-mira-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </button>
+                    
+                    <!-- Language Toggle -->
+                    <div class="flex bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark rounded-lg overflow-hidden text-sm">
+                        <a href="../index.html" class="px-3 py-1 text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white">EN</a>
+                        <a href="../de/index.html" class="px-3 py-1 bg-mira-primary text-white font-bold">DE</a>
+                    </div>
+                    
+                    <a href="https://t.me/mira_signals_bot" class="bg-mira-primary hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition text-sm">
+                        Anmelden / Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+<!-- Hero Section -->
+<section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32 grid lg:grid-cols-2 gap-16 items-center">
+    <!-- Background Glow -->
+    <div class="absolute inset-0 flex justify-center items-center pointer-events-none -z-10">
+        <div class="w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[120px] mix-blend-screen opacity-50 dark:opacity-30"></div>
+        <div class="w-[400px] h-[400px] bg-teal-500/20 rounded-full blur-[100px] mix-blend-screen opacity-50 dark:opacity-30 -translate-x-20"></div>
+    </div>
+
+    <!-- Text & CTA -->
+    <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark text-sm font-semibold mb-6 shadow-sm">
+            <span class="flex h-2 w-2 rounded-full bg-mira-success"></span>
+            Active on 29 Binance Markets
+        </div>
+        
+        <h1 class="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 text-mira-text dark:text-mira-textDark">
+            Der Krypto-Trading-Bot, der nie schläft.
+        </h1>
+        <p class="text-xl text-mira-muted dark:text-mira-mutedDark mb-10 leading-relaxed font-medium">
+            Wir bringen eine Multi-Agenten-KI an den Start, die Markttrends rund um die Uhr analysiert. Sichere dir einen Platz auf der Warteliste für den Early Access.
+        </p>
+        
+        <!-- Waitlist Form -->
+        <div id="waitlist" class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-6 rounded-2xl max-w-md shadow-xl transition-all hover:shadow-2xl hover:border-mira-primary/30">
+            <h3 class="text-lg font-bold mb-2">Closed Beta Warteliste 🚀</h3>
+            <p class="text-sm text-mira-muted dark:text-mira-mutedDark mb-4">Die Plätze für die Early-Access-Phase sind streng limitiert. Trage dich jetzt ein.</p>
+            
+            
+            
+            <form action="https://formspree.io/f/mzdwgoge" method="POST" class="flex flex-col gap-3">
+                <div class="hidden">
+                    <label>Do not fill this out if you are human: <input type="text" name="website" tabindex="-1"></label>
+                </div>
+                
+                <input type="hidden" name="lang" value="de">
+                <input type="email" name="email" required placeholder="Deine E-Mail-Adresse" class="bg-mira-bg dark:bg-mira-bgDark border border-mira-border dark:border-mira-borderDark rounded-xl px-4 py-3 text-mira-text dark:text-mira-textDark focus:outline-none focus:ring-2 focus:ring-mira-primary/50 transition font-medium shadow-inner">
+                
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl px-4 py-3 transition-all shadow-lg shadow-blue-500/25 active:scale-[0.98]" onclick="this.innerText='...';">
+                    Auf die Warteliste
+                </button>
+            </form>
+            
+            <div class="mt-4 flex items-center justify-center gap-2 text-xs font-bold text-orange-500 dark:text-orange-400 bg-orange-500/10 py-1.5 px-3 rounded-lg">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                </span>
+                Nur noch 14 Early Access Plätze verfügbar
+            </div>
+        </div>
+        
+        <div class="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm font-medium text-mira-muted dark:text-mira-mutedDark">
+            <div class="flex items-center gap-3 bg-mira-card dark:bg-[#1e293b] px-5 py-3 rounded-xl border border-mira-border dark:border-[#334155] shadow-sm">
+                <svg class="w-6 h-6 text-[#2AABEE]" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.892-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                <div class="flex flex-col">
+                    <span class="text-xs uppercase font-bold tracking-wider opacity-80">Delivered via</span>
+                    <span class="font-black text-sm text-mira-text dark:text-white">Telegram</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 bg-[#F3BA2F]/10 px-5 py-3 rounded-xl border border-[#F3BA2F]/30 shadow-sm text-[#F3BA2F]">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.01 6.892L8.718 10.18l3.292 3.29 3.291-3.29zm0-4.636l4.632 4.63-1.782 1.781-2.85-2.85-2.852 2.85-1.78-1.781zm6.417 6.415L20.211 10.45l-4.635 4.632 1.781-1.781 2.851-2.852zm-12.834 0L3.791 10.45l4.633 4.632-1.78-1.781-2.851-2.852zM12.01 17.108l3.291-3.29 1.782 1.781-5.073 5.074-5.074-5.074 1.78-1.781z"/></svg>
+                <div class="flex flex-col">
+                    <span class="text-xs uppercase font-bold tracking-wider opacity-80">Official Partner</span>
+                    <span class="font-black text-sm text-mira-text dark:text-white">Binance API</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pure CSS Product Mockup -->
+    <div class="relative z-10 hidden md:block h-[500px]">
+        
+        <!-- Dashboard Background Card -->
+        <div class="absolute right-0 top-10 w-[340px] bg-mira-card dark:bg-[#1e293b] border border-mira-border dark:border-[#334155] rounded-3xl p-6 shadow-2xl rotate-3 hover:rotate-0 transition-all duration-500">
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="font-bold text-lg">Tracked Coins</h4>
+                <span class="bg-gray-200 dark:bg-gray-700 text-xs px-2 py-1 rounded-full font-bold">3/5</span>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="bg-mira-bg dark:bg-[#0f172a] p-3 rounded-xl flex justify-between items-center border border-mira-border dark:border-[#334155]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500 font-bold text-xs">SUI</div>
+                        <span class="font-bold">SUI/USDT</span>
+                    </div>
+                    <span class="text-mira-success font-semibold text-sm">+5.2%</span>
+                </div>
+                <div class="bg-mira-bg dark:bg-[#0f172a] p-3 rounded-xl flex justify-between items-center border border-mira-border dark:border-[#334155]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-500 font-bold text-xs">INJ</div>
+                        <span class="font-bold">INJ/USDT</span>
+                    </div>
+                    <span class="text-mira-muted dark:text-gray-400 font-semibold text-sm">Waiting</span>
+                </div>
+                <div class="bg-mira-bg dark:bg-[#0f172a] p-3 rounded-xl flex justify-between items-center border border-mira-border dark:border-[#334155]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold text-xs">BTC</div>
+                        <span class="font-bold">BTC/USDT</span>
+                    </div>
+                    <span class="text-mira-danger font-semibold text-sm">-1.1%</span>
+                </div>
+            </div>
+            <div class="mt-6 w-full h-10 border border-dashed border-mira-border dark:border-[#334155] rounded-xl flex items-center justify-center text-mira-muted dark:text-gray-500 text-sm font-bold">
+                + Add Coin
+            </div>
+        </div>
+        
+        <!-- Telegram Notification Floating Card -->
+        <div class="absolute left-0 bottom-20 w-[300px] bg-white/80 dark:bg-[#0f172a]/80 backdrop-blur-xl border border-white/50 dark:border-white/10 rounded-2xl p-4 shadow-2xl -rotate-6 hover:rotate-0 hover:scale-105 transition-all duration-500">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                </div>
+                <div class="w-full">
+                    <h5 class="font-bold text-sm text-mira-text dark:text-white">MIRA Signal Bot</h5>
+                    <div class="mt-1 bg-gray-100 dark:bg-[#1e293b] p-3 rounded-xl rounded-tl-none text-sm border border-mira-border dark:border-[#334155] w-full">
+                        <p class="text-mira-success font-black mb-2 text-xs tracking-wider">🟢 BUY (LONG)</p>
+                        <div class="grid grid-cols-2 gap-2 mb-2 font-medium">
+                            <div><span class="text-xs text-mira-muted dark:text-gray-400 block">Pair</span><strong>INJ/USDT</strong></div>
+                            <div><span class="text-xs text-mira-muted dark:text-gray-400 block">Entry</span><strong>$24.50</strong></div>
+                            <div><span class="text-xs text-mira-muted dark:text-gray-400 block">Stop Loss</span><strong class="text-mira-danger">$23.10</strong></div>
+                            <div><span class="text-xs text-mira-muted dark:text-gray-400 block">Take Profit</span><strong class="text-mira-success">$28.00</strong></div>
+                        </div>
+                        <p class="text-gray-500 dark:text-gray-400 mt-2 text-[10px] text-right">Just now</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- AI Pipeline Infographic -->
+<section id="algorithm" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-mira-card/50 dark:bg-[#0f172a]/50 rounded-3xl my-10 border border-mira-border dark:border-mira-borderDark">
+    <div class="text-center mb-16">
+        <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">The AI Pipeline</h2>
+        <p class="text-lg text-mira-muted dark:text-mira-mutedDark max-w-2xl mx-auto">How MIRA transforms raw market data into high-probability signals through a self-improving feedback loop.</p>
+    </div>
+    
+    <div class="relative max-w-5xl mx-auto">
+        <!-- Self-Improvement Loop Arrow (Desktop) -->
+        <div class="hidden lg:block absolute -top-8 left-1/4 right-1/4 h-16 border-t-2 border-l-2 border-r-2 border-dashed border-teal-500/50 rounded-t-3xl z-0">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-mira-bg dark:bg-[#0f172a] px-4 text-xs font-bold text-teal-500 uppercase tracking-widest flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Self-Improvement Loop
+            </div>
+            <div class="absolute -left-1.5 bottom-0 w-3 h-3 bg-teal-500 rounded-full animate-ping"></div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 relative z-10 pt-4">
+            
+            <!-- Step 1: Data -->
+            <div class="w-full lg:w-1/4 bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl text-center relative hover:-translate-y-2 transition-transform shadow-xl">
+                <div class="w-16 h-16 mx-auto bg-blue-500/10 text-blue-500 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                </div>
+                <h3 class="font-bold text-xl mb-2">Market Data</h3>
+                <p class="text-sm text-mira-muted dark:text-mira-mutedDark">Binance OHLCV data & Technical Indicators</p>
+            </div>
+            
+            <!-- Connector 1 -->
+            <div class="hidden lg:flex w-1/8 h-0.5 bg-gradient-to-r from-blue-500/50 to-purple-500/50 relative">
+                <div class="absolute right-0 -top-1.5 w-3 h-3 bg-purple-500 rounded-full animate-ping"></div>
+            </div>
+            
+            <!-- Step 2: Analyst Agent -->
+            <div class="w-full lg:w-1/4 bg-gradient-to-b from-purple-500/10 to-mira-card dark:to-mira-cardDark border border-purple-500/30 p-8 rounded-3xl text-center relative hover:-translate-y-2 transition-transform shadow-xl shadow-purple-500/10">
+                <div class="w-16 h-16 mx-auto bg-purple-500 text-white rounded-full flex items-center justify-center mb-4 shadow-lg shadow-purple-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="4"/></svg>
+                </div>
+                <h3 class="font-bold text-xl mb-2">Analyst Agent</h3>
+                <p class="text-sm text-mira-muted dark:text-mira-mutedDark">LLM identifies trends & predicts regime shifts</p>
+            </div>
+            
+            <!-- Connector 2 -->
+            <div class="hidden lg:flex w-1/8 h-0.5 bg-gradient-to-r from-purple-500/50 to-red-500/50 relative">
+                <div class="absolute right-0 -top-1.5 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+            </div>
+            
+            <!-- Step 3: Risk Manager -->
+            <div class="w-full lg:w-1/4 bg-gradient-to-b from-red-500/10 to-mira-card dark:to-mira-cardDark border border-red-500/30 p-8 rounded-3xl text-center relative hover:-translate-y-2 transition-transform shadow-xl shadow-red-500/10">
+                <div class="w-16 h-16 mx-auto bg-red-500 text-white rounded-full flex items-center justify-center mb-4 shadow-lg shadow-red-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                </div>
+                <h3 class="font-bold text-xl mb-2">Risk Manager</h3>
+                <p class="text-sm text-mira-muted dark:text-mira-mutedDark">Calculates ATR sizing & dynamic Stop-Losses</p>
+            </div>
+            
+            <!-- Connector 3 -->
+            <div class="hidden lg:flex w-1/8 h-0.5 bg-gradient-to-r from-red-500/50 to-green-500/50 relative">
+                <div class="absolute right-0 -top-1.5 w-3 h-3 bg-green-500 rounded-full animate-ping"></div>
+            </div>
+            
+            <!-- Step 4: Dispatch -->
+            <div class="w-full lg:w-1/4 bg-mira-card dark:bg-mira-cardDark border border-green-500/30 p-8 rounded-3xl text-center relative hover:-translate-y-2 transition-transform shadow-xl shadow-green-500/10">
+                <div class="w-16 h-16 mx-auto bg-green-500 text-white rounded-full flex items-center justify-center mb-4 shadow-lg shadow-green-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+                </div>
+                <h3 class="font-bold text-xl mb-2">Execution</h3>
+                <p class="text-sm text-mira-muted dark:text-mira-mutedDark">Signals broadcasted instantly via Telegram</p>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="text-center mt-12">
+        <a href="../de/blog/01-how-it-works.html" class="inline-flex items-center gap-2 text-mira-primary font-bold hover:underline">
+            Read the Deep Dive <span aria-hidden="true">&rarr;</span>
+        </a>
+    </div>
+</section>
+
+<!-- Bento Box Features -->
+<section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-16">
+        <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight">Warum MIRA anders ist</h2>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl group">
+            <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01"/><path d="M7 20v-4"/><path d="M12 20v-8"/><path d="M17 20V8"/><path d="M22 4v16"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Multi-Agenten-Architektur</h3>
+            <p class="text-mira-muted dark:text-mira-mutedDark leading-relaxed">Anstatt sich auf ein einziges Modell zu verlassen, nutzt MIRA ein Netzwerk spezialisierter KI-Agenten. Ein Agent analysiert die Indikatoren, ein anderer steuert das Risiko und ein dritter führt die Trades aus – für maximale Präzision.</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl group">
+            <div class="w-14 h-14 bg-red-500/10 text-red-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Dynamisches Risikomanagement</h3>
+            <p class="text-mira-muted dark:text-mira-mutedDark leading-relaxed">MIRA passt Stop-Loss-Level in Echtzeit an die Marktvolatilität an und nutzt ATR-basiertes Sizing, um den Kapitalerhalt in volatilen Märkten zu sichern.</p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl hover:-translate-y-1 transition-all duration-300 shadow-sm hover:shadow-xl group">
+            <div class="w-14 h-14 bg-teal-500/10 text-teal-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:bg-teal-500 group-hover:text-white transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-4.24 4.24a3 3 0 0 0 0 4.24l.35.35"/><path d="M15 15 2 2"/><path d="M22 22 17 17"/></svg>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Selbstlernende Pipeline</h3>
+            <p class="text-mira-muted dark:text-mira-mutedDark leading-relaxed">Unser Feedback-Loop wertet vergangene Trades aus und optimiert die Strategien der Analysten-Agenten automatisch. Je länger MIRA läuft, desto intelligenter wird das System.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-mira-border dark:border-mira-borderDark" id="testimonials">
+    <div class="text-center mb-16">
+        <h2 class="text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">Von Beta-Testern empfohlen</h2>
+        <p class="text-lg text-mira-muted dark:text-mira-mutedDark">Glaub uns nicht einfach so. Das sagen unsere ersten Nutzer.</p>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+        <!-- Review 1 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl">
+            <div class="flex items-center gap-4 mb-6">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="w-12 h-12 rounded-full shadow-sm">
+                <div>
+                    <h4 class="font-bold text-mira-text dark:text-white">Alex K.</h4>
+                    <p class="text-xs text-mira-muted dark:text-mira-mutedDark">@alex_crypto</p>
+                </div>
+            </div>
+            <p class="text-mira-muted dark:text-mira-mutedDark font-medium leading-relaxed">
+                &#34;Ich habe Dutzende Signal-Bots ausprobiert. MIRA ist der einzige, der nicht einfach rät. Die dynamischen Stop-Loss-Anpassungen während des letzten Dumps haben buchstäblich mein Portfolio gerettet.&#34;
+            </p>
+        </div>
+        
+        <!-- Review 2 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl">
+            <div class="flex items-center gap-4 mb-6">
+                <img src="https://i.pravatar.cc/150?img=47" alt="Avatar" class="w-12 h-12 rounded-full shadow-sm">
+                <div>
+                    <h4 class="font-bold text-mira-text dark:text-white">Sarah T.</h4>
+                    <p class="text-xs text-mira-muted dark:text-mira-mutedDark">@sarah_trades</p>
+                </div>
+            </div>
+            <p class="text-mira-muted dark:text-mira-mutedDark font-medium leading-relaxed">
+                &#34;Die Logik hinter MIRA ist unglaublich smart. Man kann sehen, wie die KI-Agenten im Hintergrund über den Trade debattieren. Es fühlt sich an, als hätte man einen Hedgefonds-Risikomanager in der Tasche.&#34;
+            </p>
+        </div>
+        
+        <!-- Review 3 -->
+        <div class="bg-mira-card dark:bg-mira-cardDark border border-mira-border dark:border-mira-borderDark p-8 rounded-3xl">
+            <div class="flex items-center gap-4 mb-6">
+                <img src="https://i.pravatar.cc/150?img=33" alt="Avatar" class="w-12 h-12 rounded-full shadow-sm">
+                <div>
+                    <h4 class="font-bold text-mira-text dark:text-white">Marcus D.</h4>
+                    <p class="text-xs text-mira-muted dark:text-mira-mutedDark">@marcusd_eth</p>
+                </div>
+            </div>
+            <p class="text-mira-muted dark:text-mira-mutedDark font-medium leading-relaxed">
+                &#34;Endlich ein Bot, der nicht jede grüne Kerze blind long geht. Der Selbstoptimierungs-Loop ist real. Im letzten Monat hat sich die Trefferquote in unruhigen Phasen deutlich verbessert.&#34;
+            </p>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-mira-border dark:border-mira-borderDark bg-mira-bg dark:bg-mira-bgDark py-8 mt-20 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-mira-muted dark:text-gray-400 text-sm">© 2026 MIRA. Alle Rechte vorbehalten.</p>
+            <div class="flex gap-6 text-sm">
+                <a href="../de/legal_privacy.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Datenschutzerklärung</a>
+                <a href="../de/legal_terms.html" class="text-mira-muted dark:text-gray-400 hover:text-black dark:hover:text-white transition">Nutzungsbedingungen</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
